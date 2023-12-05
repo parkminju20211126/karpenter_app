@@ -6,4 +6,4 @@ RUN npm install
 COPY main.js /app
 COPY . /app
 EXPOSE 5000
-CMD [ "node", "main.js" ] 
+CMD [ "node", "index.js" ] 
