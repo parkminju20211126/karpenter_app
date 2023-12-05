@@ -1,41 +1,41 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cheese
+  name: test
   labels:
-    app: cheese
+    app: test
 spec:
   replicas: 3
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      app: cheese
+      app: test
   template:
     metadata:
       labels:
-        app: cheese
-        tier: cheese
+        app: test
+        tier: test
     spec:
       containers:
-      - name: cheese
-        image: minju0907/cheese:latest
+      - name: test
+        image: haeun161/test:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 5000
-          name: cheese
+          name: test
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: cheese
+  name: test
   labels:
-    app: cheese
+    app: test
 spec:
   ports:
   - port: 5000
     targetPort: 5000
   selector:
-    app: cheese
-    tier: cheese
+    app: test
+    tier: test
   type: LoadBalancer
