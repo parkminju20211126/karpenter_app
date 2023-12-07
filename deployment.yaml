@@ -24,6 +24,9 @@ spec:
         ports:
         - containerPort: 5000
           name: test
+        envFrom:
+        - secretRef:
+            name: env-secret
 ---
 apiVersion: v1
 kind: Service
