@@ -1,7 +1,7 @@
 const path = require('path');
 const express = require('express');
 const dotenv = require('dotenv').config();
-const port = process.env.PORT || 5000;
+const port = 8080;
 
 const app = express();
 
@@ -19,4 +19,9 @@ app.get(
     "/", (req,res) =>
     {res.render("index.ejs");}
 );
+app.get(
+    "/health", (req,res) =>{
+        console.log("health check");
+        res.status(200)
+    });
 app.listen(port, () => console.log(`Server Started on port`));
