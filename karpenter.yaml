@@ -9,13 +9,13 @@ spec:
       requirements:
         - key: kubernetes.io/arch
           operator: In
-          values: ["amd64"]  # 노드의 아키텍처
+          values: ["amd64"]  # 노드 아키텍처
         - key: kubernetes.io/os
           operator: In
           values: ["linux"]  # 운영 체제
         - key: karpenter.sh/capacity-type
           operator: In
-          values: ["on-demand"]  # 비용 최적화를 위해 스팟 인스턴스 사용 (옵션)
+          values: ["spot", "on-demand"]  # Spot 인스턴스 선호, 필요시 온디맨드 인스턴스 사용
         - key: karpenter.k8s.aws/instance-category
           operator: In
           values: ["c", "m", "r"]  # 컴퓨팅, 메모리, 스토리지 최적화 인스턴스
@@ -26,8 +26,8 @@ spec:
   limits:
     cpu: 100  # 노드 풀에서 사용할 수 있는 총 CPU 용량 제한
   disruption:
-    consolidationPolicy: WhenEmptyOrUnderutilized  # 활용도가 낮을 때 노드 통합
-    consolidateAfter: 1m  # 활용도가 낮을 때 1분 후 노드 통합
+    consolidationPolicy: WhenEmptyOrUnderutilized  # 활용도가 낮거나 사용되지 않는 노드는 통합 및 축소
+    consolidateAfter: 2m  # 노드가 활용도가 낮을 때 2분 후 통합
 ---
 apiVersion: karpenter.k8s.aws/v1
 kind: EC2NodeClass
@@ -38,7 +38,7 @@ spec:
   role: "KarpenterNodeRole-eks-cluster"  # 클러스터 이름으로 대체
   subnetSelectorTerms:
     - tags:
-        karpenter.sh/discovery: "eks-cluster"
+        karpenter.sh/discovery: "eks-cluster"  # EKS 클러스터를 위한 서브넷 태그
   securityGroupSelectorTerms:
     - tags:
         karpenter.sh/discovery: "eks-cluster"  # 클러스터 보안 그룹 태그
